@@ -48,3 +48,4 @@ If you have any questions about the repo, contact me directly at hyewonpark26@gm
 You can find more of my other projects at [hyep2]. (https://github.com/hyep2).
 
 ## Link to Video Walkthrough
+https://drive.google.com/file/d/1qy7QYcgsNkA04Pm4HtEp1l9zYQ94AS7n/view
