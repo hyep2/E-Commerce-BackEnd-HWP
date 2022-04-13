@@ -37,22 +37,25 @@ router.post('/tags', async ({ body }, res) => {
   }
 })
 
-// router.post('/tags', async ( {body} , res) => {
-//   // create a new tag
-//   try {
-//     let newTag = await Tag.create(body);
-//     res.status(200).json(newTag)
-//   } catch (error) {
-//     res.status(500).json({error})
-//   }
-// })
 
-router.put('/tags/:id', (req, res) => {
+router.put('/tags/:id', async({params:{id}, body}, res) => {
   // update a tag's name by its `id` value
+  try {
+    let updateTag = await Tag.update(body, {where: {id}})
+    res.status(200).json("Tag has been updated")
+  } catch (error) {
+    res.status(500).json({error})
+  }
 })
 
-router.delete('/tags/:id', (req, res) => {
+router.delete('/tags/:id', async({params:{id}}, res) => {
   // delete on tag by its `id` value
+  try {
+    let deleteTag = await Tag.destroy({where:{id}});
+    res.status(200).json({message: 'Tag has been deleted'})
+  } catch (error) {
+    res.status(500).json(error)
+  }
 })
 
 module.exports = router
