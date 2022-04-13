@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const res = require('express/lib/response')
 const { Tag, Product, ProductTag } = require('../models')
 
 // The `/api/tags` endpoint
@@ -14,20 +15,37 @@ router.get('/tags', async (req, res) => {
   }
 })
 
-router.get('/tags/:id', async({params:{id}}, res) => {
-  // find a single tag by its `id`
+router.get('/tags/:id', async ({params: {id}}, res) => {
+  // find tag by id
   // be sure to include its associated Product data
   try {
-    let tag = await Tag.findOne({where: {id}, include: [{model: Product}]})
+    let tag = await Tag.findOne({ where:{id},include: [{model: Product}]})
     res.status(200).json(tag)
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({err})
   }
 })
 
-router.post('/tags', (req, res) => {
-  // create a new tag
+router.post('/tags', async ({ body }, res) => {
+  //create new tag
+  try {
+    const newTag = await Tag.create(body);
+    res.status(200).json(newTag);
+  }
+  catch (err) {
+    res.status(500).json({ err })
+  }
 })
+
+// router.post('/tags', async ( {body} , res) => {
+//   // create a new tag
+//   try {
+//     let newTag = await Tag.create(body);
+//     res.status(200).json(newTag)
+//   } catch (error) {
+//     res.status(500).json({error})
+//   }
+// })
 
 router.put('/tags/:id', (req, res) => {
   // update a tag's name by its `id` value
