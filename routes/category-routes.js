@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { response } = require('express');
 const { Category, Product } = require('../models')
 
 // The `/api/categories` endpoint
@@ -29,8 +30,8 @@ router.get('/categories/:id', async ({params: {id}}, res) => {
   }
 })
 
+// create a new category
 router.post('/categories', async({body}, res) => {
-  // create a new category
   try {
     const newCategory = await Category.create(body);
     res.status(200).json(newCategory);
@@ -40,25 +41,24 @@ router.post('/categories', async({body}, res) => {
   }
 })
 
-// router.put('/categories/:id', async ({params: {id}, body}, res) => {
-//   // update a category by its `id` value
-//   try {
-
-//   }
-//   catch (err) {
-//     res.status(500).json({err})
-//   }
-// })
-
-router.delete('/categories/:id', ({params: {id}}, res) => {
-  // delete a category by its `id` value
-  Category.destroy({where:{id}})
-  .then (category) => {
-    res.status(200).json(category)
+// update a category by its `id` value
+router.put('/categories/:id', async ({params: {id}, body}, res) => {
+  try {
+    const updateCategory = await Category.update(body,{where:{id}})
+    res.status(200).json({message: 'Category has been updated'})
   }
-  .catch (err) {
+  catch (err) {
     res.status(500).json({err})
   }
+})
+
+// delete a category by its `id` value
+router.delete('/categories/:id', ({params: {id}}, res) => {
+  Category.destroy({where:{id}})
+  .then ((category) => res.status(200).json({message: `Category has been deleted`}))
+  // .catch ((err) => res.status(500).json({err}))
+  .catch ((err) => res.status(500).json({err}))
+  
 })
 
 module.exports = router
